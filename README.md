@@ -1,5 +1,8 @@
-# Storage health monitor
-Storage Health Monitor is a lightweight monitoring utility for Linux storage servers.
+# Storage Health Monitor
+Lightweight storage monitoring for Debian servers using HP Smart Array, SnapRAID and MergerFS.
+
+It doesn't monitor everything.
+It monitors the things that matter.
 
 **Non-goals**
 
