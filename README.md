@@ -21,3 +21,12 @@ Its only purpose is to detect changes in storage health and notify the administr
 
 Originally developed while migrating a home backup server from OpenMediaVault to Debian.
 The project evolved from two small monitoring scripts into a modular storage health monitor through iterative design and testing on real hardware.
+
+# Philosophy
+✓ Lightweight
+✓ Human-readable
+✓ State-based monitoring
+✓ No unnecessary dependencies
+✓ Modular hardware backends
+✓ Quiet by default
+✓ Easy to extend
