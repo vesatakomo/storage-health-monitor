@@ -1,14 +1,23 @@
 # Storage health monitor
 Storage Health Monitor is a lightweight monitoring utility for Linux storage servers.
 
-Designed for:
+**Non-goals**
+
+Not a monitoring system
+Not a dashboard
+Not a SMART replacement
+Not a RAID management tool
+
+Its only purpose is to detect changes in storage health and notify the administrator when action is needed.
+
+**Designed for:**
 
 - HP Smart Array
 - SATA SMART
 - SnapRAID
 - MergerFS
 
-Features
+**Features**
 
 ✓ Detects SMART changes
 ✓ Detects RAID degradation
