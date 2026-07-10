@@ -15,3 +15,6 @@ Features
 ✓ Detects added/removed/replaced disks
 ✓ State-based notifications
 ✓ Zero dependencies except smartctl and ssacli
+
+Storage Health Monitor does not try to replace Zabbix, Prometheus or Grafana.
+Its only purpose is to detect changes in storage health and notify the administrator when attention is required.
