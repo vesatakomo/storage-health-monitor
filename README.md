@@ -18,3 +18,6 @@ Features
 
 Storage Health Monitor does not try to replace Zabbix, Prometheus or Grafana.
 Its only purpose is to detect changes in storage health and notify the administrator when attention is required.
+
+Originally developed while migrating a home backup server from OpenMediaVault to Debian.
+The project evolved from two small monitoring scripts into a modular storage health monitor through iterative design and testing on real hardware.
