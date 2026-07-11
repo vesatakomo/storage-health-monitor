@@ -1,4 +1,6 @@
 # Storage Health Monitor
+# When everything is healthy, SHM has nothing to say.
+
 Lightweight storage monitoring for Debian servers using HP Smart Array, SnapRAID and MergerFS.
 
 It doesn't monitor everything.
