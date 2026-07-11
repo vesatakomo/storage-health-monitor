@@ -1,0 +1,15 @@
+Storage Health Monitor
+======================
+
+Silence is good.
+
+Storage Health Monitor (SHM) monitors the health of your storage
+subsystems and reports only meaningful changes.
+
+No dashboards.
+No graphs.
+No information overload.
+
+If nothing changed, nothing is reported.
+
+Because silence means your storage is healthy.
