@@ -8,6 +8,8 @@ Storage Health Monitor (SHM) continuously checks storage subsystems and reports 
 SHM is not a replacement for smartctl, ssacli, or vendor tools. It uses them to collect health information and transforms it into concise, actionable findings.
 No dashboards. No dozens of SMART attributes. No information overload. Just storage health.
 
+Storage Health Monitor (SHM) is a quiet storage monitoring utility for Linux. It continuously evaluates storage health and reports only meaningful changes that require administrator attention. If nothing has changed, SHM stays silent.
+
 **Non-goals**
 
 Not a monitoring system
