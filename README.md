@@ -4,6 +4,10 @@ Lightweight storage monitoring for Debian servers using HP Smart Array, SnapRAID
 It doesn't monitor everything.
 It monitors the things that matter.
 
+Storage Health Monitor (SHM) continuously checks storage subsystems and reports only changes that require administrator attention.
+SHM is not a replacement for smartctl, ssacli, or vendor tools. It uses them to collect health information and transforms it into concise, actionable findings.
+No dashboards. No dozens of SMART attributes. No information overload. Just storage health.
+
 **Non-goals**
 
 Not a monitoring system
