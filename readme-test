@@ -1,15 +1,31 @@
-Storage Health Monitor
-======================
+#The SHM Philosophy
 
+Storage Health Monitor exists for one reason:
+
+To tell the administrator when storage health has changed.
+
+Nothing more.
+Nothing less.
+
+#Principles
 Silence is good.
+Report changes, not statistics.
+Every finding must be actionable.
+Never guess.
+Reliability over features.
+Simple is maintainable.
 
-Storage Health Monitor (SHM) monitors the health of your storage
-subsystems and reports only meaningful changes.
+#What SHM is
+A storage health engine.
+A change detector.
+An attention filter.
+What SHM is not
+A SMART viewer.
+A dashboard.
+A graphing tool.
+An inventory database.
+A replacement for vendor utilities.
 
-No dashboards.
-No graphs.
-No information overload.
+Vendor tools tell you everything.
 
-If nothing changed, nothing is reported.
-
-Because silence means your storage is healthy.
+SHM tells you what matters.
