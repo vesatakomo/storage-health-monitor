@@ -1,0 +1,36 @@
+#!/bin/bash
+
+###############################################################################
+# Storage Health Monitor
+###############################################################################
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$SCRIPT_DIR/lib/load.sh"
+
+main()
+{
+    parse_args "$@"
+
+    init
+
+    #
+    # Collect findings
+    #
+    collect_hp_findings
+    collect_smart_findings
+
+    #
+    # Process findings
+    #
+    compare_findings
+    save_findings
+    notify_findings
+
+    #
+    # Display findings
+    #
+    show_findings
+}
+
+main "$@"

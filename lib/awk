@@ -1,0 +1,14 @@
+BEGIN {
+    in_block = 0
+}
+
+/^[[:space:]]*physicaldrive / && $0 !~ /\(/ {
+    print "FOUND DRIVE"
+    in_block = 1
+    next
+}
+
+in_block && /^[[:space:]]*Status:/ {
+    print "STATUS=" $2
+    in_block = 0
+}
