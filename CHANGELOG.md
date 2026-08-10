@@ -8,3 +8,11 @@
 
 ### Changed
 - Replaced global status variables with a unified results model.
+
+## Refactor findings engine
+
+- Preserve finding insertion order
+- Add grouped findings display
+- Introduce print_group() helper
+- Introduce print_finding() helper
+- Separate collection from presentation
