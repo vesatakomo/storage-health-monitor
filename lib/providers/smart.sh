@@ -23,13 +23,23 @@ smart_get_health()
 {
     local device="$1"
     local type="$2"
+    local status
 
-    smartctl -H -d "$type" "$device" 2>/dev/null |
-    awk '
-        /^SMART Health Status:/ {
-            if ($4 == "OK")
-                print "'"$STATUS_OK"'"
-            else
-                print "'"$STATUS_FAIL"'"
-        }'
+    status="$(
+        smartctl -H -d "$type" "$device" 2>/dev/null |
+        awk '
+            /^SMART Health Status:/ {
+                found=1
+                if ($4 == "OK")
+                    print "'"$STATUS_OK"'"
+                else
+                    print "'"$STATUS_FAIL"'"
+            }
+            END {
+                if (!found)
+                    print "'"$STATUS_INFO"'"
+            }'
+    )"
+
+    printf '%s\n' "$status"
 }
