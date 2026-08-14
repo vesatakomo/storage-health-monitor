@@ -1,6 +1,19 @@
 #!/bin/bash
 
 ###############################################################################
+# Configuration for notifications
+###############################################################################
+
+# none      → no external notification
+# apprise   → send through Apprise
+# telegram  → send directly through Telegram Bot API
+
+NOTIFY_METHOD="none"
+APPRISE_URL=""
+
+TELEGRAM_BOT_TOKEN=""
+TELEGRAM_CHAT_ID=""
+###############################################################################
 # Storage Health Monitor
 ###############################################################################
 
