@@ -1,3 +1,20 @@
+## v0.6 (development)
+
+### Added
+- StateDB + change engine
+  
+## v0.5 (development)
+
+### Added
+- SAS disk S.M.A.R.T reading
+  
+## v0.4 (development)
+
+### Added
+- SATA S.M.A.R.T reading
+- Visual presentation of values
+- --full switch functionality
+  
 ## v0.3 (development)
 
 ### Added
