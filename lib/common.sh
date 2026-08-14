@@ -25,6 +25,7 @@ declare -A FINDING_SECTION
 declare -A FINDING_ITEM
 declare -A FINDING_STATUS
 declare -A FINDING_MESSAGE
+declare -A FINDING_NOTIFY
 
 add_finding()
 {
@@ -34,5 +35,6 @@ add_finding()
     FINDING_ITEM["$id"]="$3"
     FINDING_STATUS["$id"]="$4"
     FINDING_MESSAGE["$id"]="${5:-}"
+    FINDING_NOTIFY["$id"]="${6:-}"
     FINDING_ORDER+=("$id")
 }

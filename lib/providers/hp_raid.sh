@@ -72,45 +72,43 @@ collect_hp_findings()
         "$(hp_check_block_status "$hp_output" "Logical Drive:")"
 for device in "${!SAS_MAP[@]}"
 do
+    CHECK_DETAILS=()
     IFS=":" read -r cciss_index bay <<< "${SAS_MAP[$device]}"
     sas_smart_output="$(hp_get_smart "$device" "$cciss_index")"
 
-    grown_defects="$(hp_get_attribute \
-        "$smart_output" \
-        "Elements in grown defect list")"
+    grown_defects="$(echo "$sas_smart_output" |
+    awk -F: '/Elements in grown defect list/ {print $2}' |
+    tr -d ' ')"
     read_corrected="$(echo "$sas_smart_output" | awk '/^read:/ {print $5}')"
     read_uncorrected="$(echo "$sas_smart_output" | awk '/^read:/ {print $8}')"
-
     write_corrected="$(echo "$sas_smart_output" | awk '/^write:/ {print $5}')"
     write_uncorrected="$(echo "$sas_smart_output" | awk '/^write:/ {print $8}')"
-
     non_medium="$(echo "$sas_smart_output" |
     awk -F: '/Non-medium error count/ {print $2}' | tr -d ' ')"
 
-    check_value "hp.${device}.grown_defects" "$grown_defects"
+    check_value "hp.${device}.grown_defects" "$grown_defects" "Grown defects"
     grown_old="$CHECK_OLD_VALUE"
     grown_change="$CHECK_CHANGE"
 
-    check_value "hp.${device}.read_corrected" "$read_corrected"
+    check_value "hp.${device}.read_corrected" "$read_corrected" "Read corrected"
     read_corrected_old="$CHECK_OLD_VALUE"
     read_corrected_change="$CHECK_CHANGE"
 
-    check_value "hp.${device}.read_uncorrected" "$read_uncorrected"
+    check_value "hp.${device}.read_uncorrected" "$read_uncorrected" "Read uncorrected"
     read_uncorrected_old="$CHECK_OLD_VALUE"
     read_uncorrected_change="$CHECK_CHANGE"
 
-    check_value "hp.${device}.write_corrected" "$write_corrected"
+    check_value "hp.${device}.write_corrected" "$write_corrected" "Write corrected"
     write_corrected_old="$CHECK_OLD_VALUE"
     write_corrected_change="$CHECK_CHANGE"
 
-    check_value "hp.${device}.write_uncorrected" "$write_uncorrected"
+    check_value "hp.${device}.write_uncorrected" "$write_uncorrected" "Write uncorrected"
     write_uncorrected_old="$CHECK_OLD_VALUE"
     write_uncorrected_change="$CHECK_CHANGE"
 
-    check_value "hp.${device}.non_medium" "$non_medium"
+    check_value "hp.${device}.non_medium" "$non_medium" "Non medium"
     non_medium_old="$CHECK_OLD_VALUE"
     non_medium_change="$CHECK_CHANGE"
-
     grown_detail="$grown_defects"
     [[ "$grown_change" != "$CHANGE_NONE" && -n "$grown_old" ]] &&
     grown_detail="$grown_old -> $grown_defects"
@@ -152,12 +150,14 @@ do
     fi
 done
 
+notify_message="$(printf '%s\n' "${CHECK_DETAILS[@]}")"
 add_finding \
     "hp.${device}" \
     "HP Smart Array" \
     "SAS BAY ${bay}" \
     "$status" \
-    "Grown: $grown_detail | Read corrected: $read_corrected_detail | Read uncorrected: $read_uncorrected_detail | Write corrected: $write_corrected_detail | Write uncorrected: $write_uncorrected_detail | Non-medium: $non_medium_detail"
+    "Grown: $grown_detail | Read corrected: $read_corrected_detail | Read uncorrected: $read_uncorrected_detail | Write corrected: $write_corrected_detail | Write uncorrected: $write_uncorrected_detail | Non-medium: $non_medium_detail" \
+    "$notify_message"
 
 done
 }

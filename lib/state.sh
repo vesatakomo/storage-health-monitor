@@ -2,6 +2,7 @@
 
 CHECK_OLD_VALUE=""
 CHECK_CHANGE=""
+CHECK_DETAILS=()
 compare_value()
 {
     local old="$1"
@@ -39,6 +40,7 @@ check_value()
 {
     local key="$1"
     local new="$2"
+    local label="${3:-}"
     local old
 
     old="$(load_value "$key")"
@@ -48,10 +50,19 @@ check_value()
     if [[ -z "$old" ]]; then
         save_value "$key" "$new"
         CHECK_CHANGE="$CHANGE_NONE"
+        CHECK_DETAIL=""
         return
     fi
 
     CHECK_CHANGE="$(compare_value "$old" "$new")"
+
+    if [[ "$CHECK_CHANGE" == "$CHANGE_NONE" ]]; then
+        CHECK_DETAIL=""
+    else
+        CHECK_DETAIL="${label}: $old -> $new"
+        CHECK_DETAILS+=("$CHECK_DETAIL")
+    fi
+
     save_value "$key" "$new"
 }
 change_to_status()

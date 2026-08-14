@@ -4,6 +4,7 @@ collect_smart_findings()
 
 while read -r device option type _
 do
+    CHECK_DETAILS=()
     smart_output="$(smartctl -x "$device" 2>/dev/null)"
     reallocated="$(smart_get_attribute "$smart_output" "Reallocated_Sector_Ct")"
     events="$(smart_get_attribute "$smart_output" "Reallocated_Event_Count")"
@@ -11,36 +12,36 @@ do
     uncorrectable="$(smart_get_attribute "$smart_output" "Offline_Uncorrectable")"
     health_status="$(smart_get_health "$device" "$type")"
 
-    check_value "smart.${device}.reallocated" "$reallocated"
+    check_value "smart.${device}.reallocated" "$reallocated" "Reallocated sectors"
     reallocated_old="$CHECK_OLD_VALUE"
     reallocated_change="$CHECK_CHANGE"
 
-    check_value "smart.${device}.events" "$events"
+    check_value "smart.${device}.events" "$events" "Reallocated events"
     events_old="$CHECK_OLD_VALUE"
     events_change="$CHECK_CHANGE"
 
-    check_value "smart.${device}.pending" "$pending"
+    check_value "smart.${device}.pending" "$pending" "Pending sectors"
     pending_old="$CHECK_OLD_VALUE"
     pending_change="$CHECK_CHANGE"
 
-    check_value "smart.${device}.uncorrectable" "$uncorrectable"
+    check_value "smart.${device}.uncorrectable" "$uncorrectable" "Offline uncorrectable"
     uncorrectable_old="$CHECK_OLD_VALUE"
     uncorrectable_change="$CHECK_CHANGE"
 
-reallocated_detail="$reallocated"
-[[ "$reallocated_change" != "$CHANGE_NONE" && -n "$reallocated_old" ]] &&
+    reallocated_detail="$reallocated"
+    [[ "$reallocated_change" != "$CHANGE_NONE" && -n "$reallocated_old" ]] &&
     reallocated_detail="$reallocated_old -> $reallocated"
 
-events_detail="$events"
-[[ "$events_change" != "$CHANGE_NONE" && -n "$events_old" ]] &&
+    events_detail="$events"
+    [[ "$events_change" != "$CHANGE_NONE" && -n "$events_old" ]] &&
     events_detail="$events_old -> $events"
 
-pending_detail="$pending"
-[[ "$pending_change" != "$CHANGE_NONE" && -n "$pending_old" ]] &&
+    pending_detail="$pending"
+    [[ "$pending_change" != "$CHANGE_NONE" && -n "$pending_old" ]] &&
     pending_detail="$pending_old -> $pending"
 
-uncorrectable_detail="$uncorrectable"
-[[ "$uncorrectable_change" != "$CHANGE_NONE" && -n "$uncorrectable_old" ]] &&
+    uncorrectable_detail="$uncorrectable"
+    [[ "$uncorrectable_change" != "$CHANGE_NONE" && -n "$uncorrectable_old" ]] &&
     uncorrectable_detail="$uncorrectable_old -> $uncorrectable"
 
     status="$health_status"
@@ -58,12 +59,14 @@ uncorrectable_detail="$uncorrectable"
         fi
 done
 
+notify_message="$(printf '%s\n' "${CHECK_DETAILS[@]}")"
 add_finding \
     "smart.${device}" \
     "SMART" \
     "$device" \
     "$status" \
-    "Reallocated: $reallocated_detail | Events: $events_detail | Pending: $pending_detail | Uncorrectable: $uncorrectable_detail"
+    "Reallocated: $reallocated_detail | Events: $events_detail | Pending: $pending_detail | Uncorrectable: $uncorrectable_detail" \
+    "$notify_message"
 done < <(smart_discover_targets)
 }
 
