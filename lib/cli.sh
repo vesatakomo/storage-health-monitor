@@ -21,7 +21,7 @@ EOF
 
 parse_args()
 {
-    MODE="full"
+    MODE="normal"
 
     while [[ $# -gt 0 ]]
     do

@@ -19,13 +19,14 @@ show_findings()
     fi
 
     print_finding \
+        "$id" \
         "${FINDING_SECTION[$id]}" \
         "${FINDING_ITEM[$id]}" \
         "${FINDING_STATUS[$id]}"
     done
 }
 declare -a FINDING_ORDER=()
-
+declare -A FINDING_DETAILS
 declare -A FINDING_SECTION
 declare -A FINDING_ITEM
 declare -A FINDING_STATUS
@@ -60,12 +61,16 @@ print_group()
 }
 print_finding()
 {
-    local section="$1"
-    local item="$2"
-    local status="$3"
+    local id="$1"
+    local section="$2"
+    local item="$3"
+    local status="$4"
 
     printf "%s %-22s %s\n" \
         "$(status_icon "$status")" \
         "$item" \
         "$(status_text "$status")"
+    if [[ "$MODE" == "full" && -n "${FINDING_MESSAGE[$id]}" ]]; then
+        printf "    %s\n" "${FINDING_MESSAGE[$id]}"
+    fi
 }
