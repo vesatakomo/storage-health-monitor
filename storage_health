@@ -1,6 +1,16 @@
 #!/bin/bash
 
 ###############################################################################
+# Configuration for providers
+###############################################################################
+
+# HP_RAID - ssacli needed
+# SMART - smartctl needed
+# Use yes/no
+HP_RAID_ENABLED="yes"
+SMART_ENABLED="yes"
+
+###############################################################################
 # Configuration for notifications
 ###############################################################################
 
@@ -16,6 +26,7 @@ TELEGRAM_CHAT_ID=""
 ###############################################################################
 # Storage Health Monitor
 ###############################################################################
+#Do not change anything below
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
@@ -30,14 +41,18 @@ main()
     #
     # Collect findings
     #
+if [[ "$HP_RAID_ENABLED" == "yes" ]]; then
     collect_hp_findings
-    collect_smart_findings
+fi
 
+if [[ "$SMART_ENABLED" == "yes" ]]; then
+    collect_smart_findings
+fi
     #
     # Process findings
     #
-#    compare_findings
-#   save_findings
+    # Compare_findings
+    # Save_findings
     notify_findings
 
     #
