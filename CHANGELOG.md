@@ -1,3 +1,13 @@
+## v0.8 (development)
+
+### Added
+- Provider selection
+
+## v0.7 (development)
+
+### Added
+- Notifications. Apprise & Telegram support
+  
 ## v0.6 (development)
 
 ### Added
