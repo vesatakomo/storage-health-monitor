@@ -9,6 +9,10 @@ declare -A SAS_MAP=(
     ["/dev/sdd"]="3:4"
     ["/dev/sde"]="4:5"
 )
+declare -A INVENTORY_MODEL
+declare -A INVENTORY_SERIAL
+declare -A INVENTORY_SIZE
+declare -A INVENTORY_INTERFACE
 hp_check_status()
 {
     local hp_output="$1"
@@ -38,6 +42,60 @@ hp_check_status()
         print "'"$STATUS_OK"'"
     }'
 }
+hp_get_inventory()
+{
+    local hp_output="$1"
+    local physicaldrive=""
+    local bay=""
+    local interface=""
+    local size=""
+    local serial=""
+    local model=""
+
+    while IFS= read -r line
+    do
+        if [[ "$line" =~ ^[[:space:]]*physicaldrive[[:space:]]+([^[:space:]]+)[[:space:]]*$ ]]; then
+            physicaldrive="${BASH_REMATCH[1]}"
+            bay=""
+            interface=""
+            size=""
+            serial=""
+            model=""
+            continue
+        fi
+
+        [[ -z "$physicaldrive" ]] && continue
+
+        case "$line" in
+        *"Bay:"*)
+            bay="${line#*: }"
+            ;;
+        *"Interface Type:"*)
+            interface="${line#*: }"
+            ;;
+        *"Size:"*)
+        [[ "$line" != *"Logical/Physical Block Size:"* ]] &&
+            size="${line#*: }"
+            ;;
+        *"Serial Number:"*)
+            serial="${line#*: }"
+            ;;
+        *"Model:"*)
+            model="${line#*: }"
+            model="$(echo "$model" | xargs)"
+
+                HP_INVENTORY_INTERFACE["$bay"]="$interface"
+                HP_INVENTORY_SIZE["$bay"]="$size"
+                HP_INVENTORY_SERIAL["$bay"]="$serial"
+                HP_INVENTORY_MODEL["$bay"]="$model"
+
+                physicaldrive=""
+                ;;
+        esac
+
+    done <<< "$hp_output"
+}
+
 collect_hp_findings()
 {
     local hp_output
@@ -48,7 +106,7 @@ collect_hp_findings()
     then
         return
     fi
-    add_finding \
+   add_finding \
         "hp.controller" \
         "HP Smart Array" \
         "Controller" \
@@ -75,7 +133,7 @@ do
     CHECK_DETAILS=()
     IFS=":" read -r cciss_index bay <<< "${SAS_MAP[$device]}"
     sas_smart_output="$(hp_get_smart "$device" "$cciss_index")"
-
+done
     grown_defects="$(echo "$sas_smart_output" |
     awk -F: '/Elements in grown defect list/ {print $2}' |
     tr -d ' ')"
@@ -159,7 +217,7 @@ add_finding \
     "Grown: $grown_detail | Read corrected: $read_corrected_detail | Read uncorrected: $read_uncorrected_detail | Write corrected: $write_corrected_detail | Write uncorrected: $write_uncorrected_detail | Non-medium: $non_medium_detail" \
     "$notify_message"
 
-done
+
 }
 ###############################################################################
 # Private helpers
