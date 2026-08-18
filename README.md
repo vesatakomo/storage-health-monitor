@@ -1,16 +1,15 @@
 # Storage Health Monitor
 # When everything is healthy, SHM has nothing to say.
 
-Lightweight storage monitoring for Debian servers using HP Smart Array, SnapRAID and MergerFS.
+Lightweight storage health monitoring for Linux servers using HP Smart Array, SAS, and SATA disks.
+
+Storage Health Monitor (SHM) continuously checks storage subsystems and reports only changes that require administrator attention.
 
 It doesn't monitor everything.
 It monitors the things that matter.
 
-Storage Health Monitor (SHM) continuously checks storage subsystems and reports only changes that require administrator attention.
-SHM is not a replacement for smartctl, ssacli, or vendor tools. It uses them to collect health information and transforms it into concise, actionable findings.
-No dashboards. No dozens of SMART attributes. No information overload. Just storage health.
-
-Storage Health Monitor (SHM) is a quiet storage monitoring utility for Linux. It continuously evaluates storage health and reports only meaningful changes that require administrator attention. If nothing has changed, SHM stays silent.
+Vendor tools tell you everything.
+SHM tells you what matters.
 
 **Non-goals**
 
@@ -32,19 +31,53 @@ Its only purpose is to detect changes in storage health and notify the administr
 ✓ Detects RAID degradation
 ✓ Detects added/removed/replaced disks
 ✓ State-based notifications
-✓ Zero dependencies except smartctl and ssacli
-
-Storage Health Monitor does not try to replace Zabbix, Prometheus or Grafana.
-Its only purpose is to detect changes in storage health and notify the administrator when attention is required.
+✓ Minimal dependencies except smartctl and ssacli
 
 Originally developed while migrating a home backup server from OpenMediaVault to Debian.
 The project evolved from two small monitoring scripts into a modular storage health monitor through iterative design and testing on real hardware.
 
+### Requirements
+
+- Linux
+- Bash
+- smartctl (only required when SMART_ENABLED=yes)
+- ssacli (only required when HP_RAID_ENABLED=yes))
+
+## Installation
+
+Clone the repository:
+
+    git clone vesatakomo/storage-health-monitor
+    cd storage_health
+
+Run directly from the repository, or place `storage_health` somewhere in your PATH.
+
+## Configuration
+| Name                 | Type    | Default      | Description                                                                                            |
+| -------------------- | ------- | ------------ | ------------------------------------------------------------------------------------------------------ |
+| HP_RAID_ENABLED      | yes/no  | yes          | yes = uses ssacli to get data from HP Raid array disks. no = skip HP Raid array, no ssacli needed      |
+| SMART_ENABLED        | yes/no  | yes          | yes = uses smartctl to get data from SATA disks. no = skip SMART data from SATA disks, no smartctl needed |
+
+## Usage
+| |Description|
+|`storage_health`|Normal output. Gives just "Healthy" when no changes/ problems. Details when something has changed|
+|`storage_health --full`|Disk info with all important health attributes|
+|`storage_health --inventory`|Lists all the disks in system with Model, Size, Type and Serial|
+|`storage_health --help`|Self explanatory|
+|`storage_health --version`|Version info|
+
+_example_
+Storage Health Monitor
+
+! SAS BAY 2
+Write corrected: 87971 -> 87972
+= SHM reports the change; other healthy disks remain silent.
+
 # Philosophy
-✓ Lightweight
-✓ Human-readable
-✓ State-based monitoring
-✓ No unnecessary dependencies
-✓ Modular hardware backends
-✓ Quiet by default
-✓ Easy to extend
+
+- Silence is good.
+- Report changes, not statistics.
+- Every finding should be actionable.
+- Never guess.
+- Reliability over features.
+- Simple is maintainable.
