@@ -53,6 +53,7 @@ Clone the repository:
 Run directly from the repository, or place `storage_health` somewhere in your PATH.
 
 ## Configuration
+(Beginning of storage_health)
 | Name                 | Type    | Default      | Description                                                                                            |
 | -------------------- | ------- | ------------ | ------------------------------------------------------------------------------------------------------ |
 | HP_RAID_ENABLED      | yes/no  | yes          | yes = uses ssacli to get data from HP Raid array disks. no = skip HP Raid array, no ssacli needed      |
