@@ -1,7 +1,13 @@
+## v0.9 (development)
+
+### Added
+- Disk inventory logic
+
 ## v0.8 (development)
 
 ### Added
 - Provider selection
+- Exclusion of provider with "no"
 
 ## v0.7 (development)
 

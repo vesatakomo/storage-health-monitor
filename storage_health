@@ -39,6 +39,10 @@ main()
     init
 
     #
+    #collect disk info
+    #
+    collect_inventory
+    #
     # Collect findings
     #
 if [[ "$HP_RAID_ENABLED" == "yes" ]]; then

@@ -17,3 +17,4 @@ source "$SCRIPT_DIR/lib/notify.sh"
 
 source "$SCRIPT_DIR/lib/providers/hp_raid.sh"
 source "$SCRIPT_DIR/lib/providers/smart.sh"
+source "$SCRIPT_DIR/lib/providers/inventory.sh"
