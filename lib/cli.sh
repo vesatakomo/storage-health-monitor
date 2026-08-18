@@ -15,13 +15,14 @@ Options
     --version
     --full
     --reset
-
+    --inventory
 EOF
 }
 
 parse_args()
 {
     MODE="normal"
+    INVENTORY_ONLY=false
 
     while [[ $# -gt 0 ]]
     do
@@ -39,6 +40,10 @@ parse_args()
 
             --full)
                 MODE="full"
+                ;;
+
+            --inventory)
+                INVENTORY_ONLY=true
                 ;;
 
             --reset)

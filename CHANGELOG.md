@@ -2,6 +2,7 @@
 
 ### Added
 - Disk inventory logic
+- Disk inventory switch --inventory
 
 ## v0.8 (development)
 

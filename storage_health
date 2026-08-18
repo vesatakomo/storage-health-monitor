@@ -41,7 +41,11 @@ main()
     #
     #collect disk info
     #
+if [[ "$INVENTORY_ONLY" == "true" ]]; then
+    init
     collect_inventory
+    exit 0
+fi
     #
     # Collect findings
     #
@@ -52,11 +56,7 @@ fi
 if [[ "$SMART_ENABLED" == "yes" ]]; then
     collect_smart_findings
 fi
-    #
-    # Process findings
-    #
-    # Compare_findings
-    # Save_findings
+
     notify_findings
 
     #

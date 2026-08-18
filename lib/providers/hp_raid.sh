@@ -13,35 +13,7 @@ declare -A INVENTORY_MODEL
 declare -A INVENTORY_SERIAL
 declare -A INVENTORY_SIZE
 declare -A INVENTORY_INTERFACE
-hp_check_status()
-{
-    local hp_output="$1"
-    local object="$2"
 
-    echo "$hp_output" | awk -v object="$object" '
-    BEGIN {
-        in_object = 0
-    }
-
-    $0 ~ "^[[:space:]]*" object {
-        in_object = 1
-        next
-    }
-
-    in_object && /^[[:space:]]*Status:/ {
-
-        if ($2 != "OK") {
-            print "'"$STATUS_FAIL"'"
-            exit
-        }
-
-        in_object = 0
-    }
-
-    END {
-        print "'"$STATUS_OK"'"
-    }'
-}
 hp_get_inventory()
 {
     local hp_output="$1"
@@ -128,12 +100,11 @@ collect_hp_findings()
         "HP Smart Array" \
         "Logical drives" \
         "$(hp_check_block_status "$hp_output" "Logical Drive:")"
-for device in "${!SAS_MAP[@]}"
+while read -r device
 do
     CHECK_DETAILS=()
     IFS=":" read -r cciss_index bay <<< "${SAS_MAP[$device]}"
     sas_smart_output="$(hp_get_smart "$device" "$cciss_index")"
-done
     grown_defects="$(echo "$sas_smart_output" |
     awk -F: '/Elements in grown defect list/ {print $2}' |
     tr -d ' ')"
@@ -216,7 +187,7 @@ add_finding \
     "$status" \
     "Grown: $grown_detail | Read corrected: $read_corrected_detail | Read uncorrected: $read_uncorrected_detail | Write corrected: $write_corrected_detail | Write uncorrected: $write_uncorrected_detail | Non-medium: $non_medium_detail" \
     "$notify_message"
-
+done < <(printf '%s\n' "${!SAS_MAP[@]}" | sort)
 
 }
 ###############################################################################

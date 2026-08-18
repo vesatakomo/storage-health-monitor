@@ -25,8 +25,6 @@ Its only purpose is to detect changes in storage health and notify the administr
 
 - HP Smart Array
 - SATA SMART
-- SnapRAID
-- MergerFS
 
 **Features**
 
