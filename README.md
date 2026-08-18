@@ -41,13 +41,13 @@ The project evolved from two small monitoring scripts into a modular storage hea
 - Linux
 - Bash
 - smartctl (only required when SMART_ENABLED=yes)
-- ssacli (only required when HP_RAID_ENABLED=yes))
+- ssacli (only required when HP_RAID_ENABLED=yes)
 
 ## Installation
 
 Clone the repository:
 
-    git clone vesatakomo/storage-health-monitor
+    git clone https://github.com/vesatakomo/storage-health-monitor.git
     cd storage_health
 
 Run directly from the repository, or place `storage_health` somewhere in your PATH.
@@ -66,8 +66,8 @@ Run directly from the repository, or place `storage_health` somewhere in your PA
 ## Usage
 |Run|Description|
 | --- | ----------|
-|`storage_health`|Normal output. Gives just "Healthy" when no changes/ problems. Details when something has changed|
-|`storage_health --full`|Disk info with all important health attributes|
+|`storage_health`|Normal output. Reports only Healthy when there are no changes or problems. Details when something has changed|
+|`storage_health --full`|Shows detailed health information and important attributes.|
 |`storage_health --inventory`|Lists all the disks in system with Model, Size, Type and Serial|
 |`storage_health --help`|Self explanatory|
 |`storage_health --version`|Version info|
