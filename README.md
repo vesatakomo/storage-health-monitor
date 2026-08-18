@@ -57,20 +57,28 @@ Run directly from the repository, or place `storage_health` somewhere in your PA
 | -------------------- | ------- | ------------ | ------------------------------------------------------------------------------------------------------ |
 | HP_RAID_ENABLED      | yes/no  | yes          | yes = uses ssacli to get data from HP Raid array disks. no = skip HP Raid array, no ssacli needed      |
 | SMART_ENABLED        | yes/no  | yes          | yes = uses smartctl to get data from SATA disks. no = skip SMART data from SATA disks, no smartctl needed |
+| NOTIFY_METHOD        | value   | none         | none = no external notifications, apprise = send through apprise, telegram = send directly through Telegram Bot API|
+| APPRISE_URL          | url     |              | URL for you apprise|
+| TELEGRAM_BOT_TOKEN   | value   |              | Your token for Telegram Bot|
+| TELEGRAM_CHAT_ID     | value   |              | ID for chat you wish to receive notifications|
 
 ## Usage
-| |Description|
+|Run|Description|
+| --- | ----------|
 |`storage_health`|Normal output. Gives just "Healthy" when no changes/ problems. Details when something has changed|
 |`storage_health --full`|Disk info with all important health attributes|
 |`storage_health --inventory`|Lists all the disks in system with Model, Size, Type and Serial|
 |`storage_health --help`|Self explanatory|
 |`storage_health --version`|Version info|
 
-_example_
+**Example notification**
+```_
 Storage Health Monitor
 
 ! SAS BAY 2
 Write corrected: 87971 -> 87972
+```
+
 = SHM reports the change; other healthy disks remain silent.
 
 # Philosophy
