@@ -91,11 +91,6 @@ collect_hp_findings()
         "$(hp_cache_status "$hp_output")"
 
     add_finding \
-        "hp.physical" \
-        "HP Smart Array" \
-        "Physical drives" \
-        "$(hp_check_block_status "$hp_output" "physicaldrive")"
-    add_finding \
         "hp.logical" \
         "HP Smart Array" \
         "Logical drives" \
