@@ -48,7 +48,7 @@ The project evolved from two small monitoring scripts into a modular storage hea
 Clone the repository:
 
     git clone https://github.com/vesatakomo/storage-health-monitor.git
-    cd storage_health
+    cd storage-health-monitor
 
 Run directly from the repository, or place `storage_health` somewhere in your PATH.
 
