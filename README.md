@@ -81,7 +81,7 @@ Run directly from the repository, or place `storage_health` somewhere in your PA
 ```_
 Storage Health Monitor -servername
 ===================================
-! SAS BAY 2
+! SAS Box 1 BAY 2
 Write corrected: 87971 -> 87972
 ```
 
