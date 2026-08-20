@@ -56,9 +56,13 @@ Run directly from the repository, or place `storage_health` somewhere in your PA
 (Beginning of storage_health)
 | Name                 | Type    | Default      | Description                                                                                            |
 | -------------------- | ------- | ------------ | ------------------------------------------------------------------------------------------------------ |
-| HP_RAID_ENABLED      | yes/no  | yes          | yes = uses ssacli to get data from HP Raid array disks. no = skip HP Raid array, no ssacli needed      |
-| SMART_ENABLED        | yes/no  | yes          | yes = uses smartctl to get data from SATA disks. no = skip SMART data from SATA disks, no smartctl needed |
-| NOTIFY_METHOD        | value   | none         | none = no external notifications, apprise = send through apprise, telegram = send directly through Telegram Bot API|
+| HP_RAID_ENABLED      | yes/no  | yes          | yes = uses ssacli to get data from HP Raid array disks.
+no = skip HP Raid array, no ssacli needed      |
+| SMART_ENABLED        | yes/no  | yes          | yes = uses smartctl to get data from SATA disks.
+no= skip SMART data from SATA disks, no smartctl needed |
+| NOTIFY_METHOD        | value   | none         | none = no external notifications, 
+apprise = send through apprise, 
+telegram = send directly through Telegram Bot API|
 | APPRISE_URL          | url     |              | URL for you apprise|
 | TELEGRAM_BOT_TOKEN   | value   |              | Your token for Telegram Bot|
 | TELEGRAM_CHAT_ID     | value   |              | ID for chat you wish to receive notifications|
