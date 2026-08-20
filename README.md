@@ -50,27 +50,28 @@ Clone the repository:
     git clone https://github.com/vesatakomo/storage-health-monitor.git
     cd storage-health-monitor
 
+Copy example config and put in your settings:
+```
+cp storage-health-monitor.conf.example storage-health-monitor.conf
+```
+
 Run directly from the repository, or place `storage_health` somewhere in your PATH.
 
 ## Configuration
-(Beginning of storage_health)
+(storage-health-monitor.conf)
 | Name                 | Type    | Default      | Description                                                                                            |
 | -------------------- | ------- | ------------ | ------------------------------------------------------------------------------------------------------ |
-| HP_RAID_ENABLED      | yes/no  | yes          | yes = uses ssacli to get data from HP Raid array disks.
-no = skip HP Raid array, no ssacli needed      |
-| SMART_ENABLED        | yes/no  | yes          | yes = uses smartctl to get data from SATA disks.
-no= skip SMART data from SATA disks, no smartctl needed |
-| NOTIFY_METHOD        | value   | none         | none = no external notifications, 
-apprise = send through apprise, 
-telegram = send directly through Telegram Bot API|
+| HP_RAID_ENABLED      | yes/no  | yes          | yes = uses ssacli to get data from HP Raid array disks.<br>no = skip HP Raid array, no ssacli needed      |
+| SMART_ENABLED        | yes/no  | yes          | yes = uses smartctl to get data from SATA disks.<br>no= skip SMART, no SATA disks, no smartctl needed |
+| NOTIFY_METHOD        | value   | none         | none = no external notifications<br>apprise = send via apprise<br>telegram = send directly via Telegram Bot API<br>(NOTE: if all is 'Healthy'- you won't get any messages)|
 | APPRISE_URL          | url     |              | URL for you apprise|
 | TELEGRAM_BOT_TOKEN   | value   |              | Your token for Telegram Bot|
-| TELEGRAM_CHAT_ID     | value   |              | ID for chat you wish to receive notifications|
+| TELEGRAM_CHAT_ID     | value   |              | ID for chat you want to receive notifications|
 
 ## Usage
 |Run|Description|
 | --- | ----------|
-|`storage_health`|Normal output. Reports only Healthy when there are no changes or problems. Details when something has changed|
+|`storage_health`|Normal output. Reports Healthy when there are no changes or problems. Details when something has changed|
 |`storage_health --full`|Shows detailed health information and important attributes.|
 |`storage_health --inventory`|Lists all the disks in system with Model, Size, Type and Serial|
 |`storage_health --help`|Self explanatory|
@@ -78,8 +79,8 @@ telegram = send directly through Telegram Bot API|
 
 **Example notification**
 ```_
-Storage Health Monitor
-
+Storage Health Monitor -servername
+===================================
 ! SAS BAY 2
 Write corrected: 87971 -> 87972
 ```
