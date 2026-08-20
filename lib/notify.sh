@@ -19,7 +19,7 @@ notify_findings()
     [[ "$message" == "Storage Health Monitor"$'\n\n' ]] && return
     case "$NOTIFY_METHOD" in
         none)
-            printf '%s\n' "$message"
+            return
             ;;
         apprise)
             notify_apprise "$message"
