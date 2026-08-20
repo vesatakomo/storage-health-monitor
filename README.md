@@ -71,7 +71,7 @@ Run directly from the repository, or place `storage_health` somewhere in your PA
 ## Usage
 |Run|Description|
 | --- | ----------|
-|`storage_health`|Normal output. Reports Healthy when there are no changes or problems. Details when something has changed|
+|`storage_health`|Normal output. Reports Healthy when there are no changes or problems. Notifications are sent only when a monitored value changes. The notification includes the changed value(s), while the normal report remains concise. Use --full to display the complete health details.|
 |`storage_health --full`|Shows detailed health information and important attributes.|
 |`storage_health --inventory`|Lists all the disks in system with Model, Size, Type and Serial|
 |`storage_health --help`|Self explanatory|
