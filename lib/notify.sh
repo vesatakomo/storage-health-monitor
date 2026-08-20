@@ -5,7 +5,7 @@ notify_findings()
     local id
     local status
     local message="Storage Health Monitor- $(hostname)"$'\n\n'
-    message+="================================"$'\n\n'
+    message+="=============================="$'\n\n'
     for id in "${FINDING_ORDER[@]}"
     do
         status="${FINDING_STATUS[$id]}"
