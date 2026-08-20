@@ -3,17 +3,82 @@
 ###############################################################################
 # HP Smart Array Provider
 ###############################################################################
-declare -A SAS_MAP=(
-    ["/dev/sda"]="0:1"
-    ["/dev/sdb"]="1:2"
-    ["/dev/sdd"]="3:4"
-    ["/dev/sde"]="4:5"
-)
-declare -A INVENTORY_MODEL
-declare -A INVENTORY_SERIAL
-declare -A INVENTORY_SIZE
-declare -A INVENTORY_INTERFACE
+declare -A SAS_MAP
+declare -A HP_INVENTORY_MODEL
+declare -A HP_INVENTORY_SERIAL
+declare -A HP_INVENTORY_SIZE
+declare -A HP_INVENTORY_INTERFACE
+hp_discover_sas()
+{
+    local hp_output
+    local device
+    local serial
+    local cciss
+    local found
+    local total
 
+    hp_output="$(ssacli ctrl all show config detail 2>/dev/null)" || return
+
+    total=0
+
+    while read -r device serial
+    do
+        [[ -z "$serial" ]] && continue
+        ((total++))
+    done < <(
+        echo "$hp_output" |
+        awk '
+            /physicaldrive/ {
+                location=$2
+                in_drive=1
+                next
+            }
+
+            in_drive && /^         Serial Number:/ {
+                print location, $3
+                in_drive=0
+            }
+        '
+    )
+
+    found=0
+
+    for cciss in $(seq 0 31)
+    do
+        serial="$(
+            smartctl -x -d "cciss,$cciss" /dev/sda 2>/dev/null |
+            awk '/^Serial number:/ {print $3; exit}'
+        )"
+
+        [[ -z "$serial" ]] && continue
+        while read -r device expected_serial
+        do
+            if [[ "$serial" == "$expected_serial" ]]
+            then
+                SAS_MAP["$device"]="$cciss"
+                ((found++))
+                break
+            fi
+        done < <(
+            echo "$hp_output" |
+            awk '
+                /physicaldrive/ {
+                    location=$2
+                    in_drive=1
+                    next
+                }
+
+                in_drive && /^         Serial Number:/ {
+                    print location, $3
+                    in_drive=0
+                }
+            '
+        )
+
+        ((found >= total)) && break
+    done
+
+}
 hp_get_inventory()
 {
     local hp_output="$1"
@@ -56,11 +121,11 @@ hp_get_inventory()
             model="${line#*: }"
             model="$(echo "$model" | xargs)"
 
-                HP_INVENTORY_INTERFACE["$bay"]="$interface"
-                HP_INVENTORY_SIZE["$bay"]="$size"
-                HP_INVENTORY_SERIAL["$bay"]="$serial"
-                HP_INVENTORY_MODEL["$bay"]="$model"
-
+	key="$physicaldrive"
+	HP_INVENTORY_INTERFACE["$key"]="$interface"
+	HP_INVENTORY_SIZE["$key"]="$size"
+	HP_INVENTORY_SERIAL["$key"]="$serial"
+	HP_INVENTORY_MODEL["$key"]="$model"
                 physicaldrive=""
                 ;;
         esac
@@ -78,6 +143,7 @@ collect_hp_findings()
     then
         return
     fi
+hp_discover_sas
    add_finding \
         "hp.controller" \
         "HP Smart Array" \
@@ -97,9 +163,12 @@ collect_hp_findings()
         "$(hp_check_block_status "$hp_output" "Logical Drive:")"
 while read -r device
 do
+[[ -z "$device" ]] && continue
+
     CHECK_DETAILS=()
-    IFS=":" read -r cciss_index bay <<< "${SAS_MAP[$device]}"
-    sas_smart_output="$(hp_get_smart "$device" "$cciss_index")"
+    cciss_index="${SAS_MAP[$device]}"
+    sas_smart_output="$(hp_get_smart "/dev/sda" "$cciss_index")"
+
     grown_defects="$(echo "$sas_smart_output" |
     awk -F: '/Elements in grown defect list/ {print $2}' |
     tr -d ' ')"
@@ -175,10 +244,15 @@ do
 done
 
 notify_message="$(printf '%s\n' "${CHECK_DETAILS[@]}")"
+   box="${device#*:}"
+   box="${box%%:*}"
+
+   bay="${device##*:}"
+
 add_finding \
     "hp.${device}" \
     "HP Smart Array" \
-    "SAS BAY ${bay}" \
+    "SAS Box ${box} Bay ${bay}" \
     "$status" \
     "Grown: $grown_detail | Read corrected: $read_corrected_detail | Read uncorrected: $read_uncorrected_detail | Write corrected: $write_corrected_detail | Write uncorrected: $write_uncorrected_detail | Non-medium: $non_medium_detail" \
     "$notify_message"

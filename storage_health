@@ -8,7 +8,7 @@
 # SMART - smartctl needed
 # Use yes/no
 HP_RAID_ENABLED="yes"
-SMART_ENABLED="yes"
+SMART_ENABLED="no"
 
 ###############################################################################
 # Configuration for notifications
