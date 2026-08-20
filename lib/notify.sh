@@ -4,6 +4,7 @@ notify_findings()
 {
     local id
     local status
+    local has_findings=false
     local message="Storage Health Monitor- $(hostname)"$'\n\n'
     message+="=============================="$'\n\n'
     for id in "${FINDING_ORDER[@]}"
@@ -11,11 +12,12 @@ notify_findings()
         status="${FINDING_STATUS[$id]}"
 
         if (( status >= STATUS_WARN )); then
+	    has_findings=true
             message+="$(status_icon "$status") ${FINDING_ITEM[$id]}"$'\n'
             message+="${FINDING_NOTIFY[$id]}"$'\n\n'
         fi
     done
-
+    [[ "$has_findings" == false ]] && return
     [[ "$message" == "Storage Health Monitor"$'\n\n' ]] && return
     case "$NOTIFY_METHOD" in
         none)
