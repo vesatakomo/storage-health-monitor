@@ -10,3 +10,4 @@
 # macOS
 .DS_Store
 state.db
+storage-health-monitor.conf
